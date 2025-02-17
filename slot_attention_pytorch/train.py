@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument
 parser.add_argument('--model_dir', default='ckpts/model10.ckpt', type=str, help='where to save models' )
 parser.add_argument('--seed', default=0, type=int, help='random seed')
-parser.add_argument('--batch_size', default=8, type=int)
+parser.add_argument('--batch_size', default=38, type=int)
 parser.add_argument('--num_slots', default=7, type=int, help='Number of slots in Slot Attention.')
 parser.add_argument('--num_iterations', default=3, type=int, help='Number of attention iterations.')
 parser.add_argument('--hid_dim', default=64, type=int, help='hidden dimension size')
@@ -27,7 +27,7 @@ parser.add_argument('--num_workers', default=4, type=int, help='number of worker
 parser.add_argument('--num_epochs', default=1000, type=int, help='number of workers for loading data')
 
 opt = parser.parse_args()
-resolution = (128, 128)
+resolution = (32, 32)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -42,7 +42,7 @@ params = [{'params': model.parameters()}]
 train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=opt.batch_size,
                         shuffle=True)
 
-optimizer = optim.Adam(params, lr=opt.learning_rate)
+optimizer = optim.Adam(params, lr=opt.learning_rate) 
 
 start = time.time()
 i = 0

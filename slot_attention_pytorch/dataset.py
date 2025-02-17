@@ -15,7 +15,7 @@ class CustomDataset(Dataset):
         image = torch.from_numpy(image).permute(2, 0, 1)  # Convert to (C, H, W)
 
         # Resize to (128, 128)
-        image = TF.resize(image, [128, 128])
+        image = TF.resize(image, [32, 32])
 
         if self.transform:
             image = self.transform(image)
