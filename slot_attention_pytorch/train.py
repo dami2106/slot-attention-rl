@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument
 parser.add_argument('--model_dir', default='ckpts/model10.ckpt', type=str, help='where to save models' )
 parser.add_argument('--seed', default=0, type=int, help='random seed')
-parser.add_argument('--batch_size', default=16, type=int)
+parser.add_argument('--batch_size', default=8, type=int)
 parser.add_argument('--num_slots', default=7, type=int, help='Number of slots in Slot Attention.')
 parser.add_argument('--num_iterations', default=3, type=int, help='Number of attention iterations.')
 parser.add_argument('--hid_dim', default=64, type=int, help='hidden dimension size')
@@ -31,7 +31,7 @@ resolution = (128, 128)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-train_set = PARTNET('train')
+train_set = CustomDataset("1000_nopick_pixel_states.npy")
 model = SlotAttentionAutoEncoder(resolution, opt.num_slots, opt.num_iterations, opt.hid_dim).to(device)
 # model.load_state_dict(torch.load('./tmp/model6.ckpt')['model_state_dict'])
 
@@ -40,7 +40,7 @@ criterion = nn.MSELoss()
 params = [{'params': model.parameters()}]
 
 train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=opt.batch_size,
-                        shuffle=True, num_workers=opt.num_workers)
+                        shuffle=True)
 
 optimizer = optim.Adam(params, lr=opt.learning_rate)
 
