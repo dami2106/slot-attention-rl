@@ -41,7 +41,7 @@ def main():
     model = SlotAttentionAutoEncoder(resolution, num_slots, num_iterations, hid_dim)
     
     # Load the checkpoint
-    checkpoint_path = 'ckpts/model10.ckpt'  # Update path if necessary
+    checkpoint_path = 'ckpts/model_220.ckpt'  # Update path if necessary
     checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
     
@@ -71,43 +71,46 @@ def main():
     with torch.no_grad():
         # The model's forward returns several outputs; we extract slots.
         _, _, _, slots = model(image)
-        class_probs = classifier(slots)
-        print("Class probabilities shape:", class_probs.shape)  # Likely [7, 8, 8, 10]
+
+        print(slots.shape)
+
+        # class_probs = classifier(slots)
+        # print("Class probabilities shape:", class_probs.shape)  # Likely [7, 8, 8, 10]
     
     # ------------------- Plotting Code ------------------- #
     # Convert the image to a NumPy array for plotting.
     # Assuming the image tensor shape is [1, C, H, W] (C could be 1 or 3)
-    img_np = image[0].cpu().permute(1, 2, 0).numpy()
-    if img_np.shape[2] == 1:
-        img_np = img_np.squeeze(axis=2)
+    # img_np = image[0].cpu().permute(1, 2, 0).numpy()
+    # if img_np.shape[2] == 1:
+    #     img_np = img_np.squeeze(axis=2)
 
-    # Convert class probabilities to NumPy.
-    # Here, class_probs is [num_slots, H, W, num_classes]
-    slot_probs = class_probs.cpu().numpy()  # Shape: [7, 8, 8, 10]
-    num_slots = slot_probs.shape[0]
-    num_classes = slot_probs.shape[-1]
+    # # Convert class probabilities to NumPy.
+    # # Here, class_probs is [num_slots, H, W, num_classes]
+    # slot_probs = class_probs.cpu().numpy()  # Shape: [7, 8, 8, 10]
+    # num_slots = slot_probs.shape[0]
+    # num_classes = slot_probs.shape[-1]
 
-    # Create subplots: one for the image and one per slot.
-    fig, axes = plt.subplots(1, num_slots + 1, figsize=(4 * (num_slots + 1), 4))
+    # # Create subplots: one for the image and one per slot.
+    # fig, axes = plt.subplots(1, num_slots + 1, figsize=(4 * (num_slots + 1), 4))
 
-    # Plot the input image.
-    axes[0].imshow(img_np, cmap='gray' if img_np.ndim == 2 else None)
-    axes[0].set_title("Input Image")
-    axes[0].axis("off")
+    # # Plot the input image.
+    # axes[0].imshow(img_np, cmap='gray' if img_np.ndim == 2 else None)
+    # axes[0].set_title("Input Image")
+    # axes[0].axis("off")
 
-    # Plot the class probability distribution for each slot.
-    # We average the spatial dimensions (axis 0 and 1 of each slot) to get a single probability vector per slot.
-    for i in range(num_slots):
-        # Average over the spatial dimensions (8,8) -> result is shape [num_classes]
-        slot_avg = slot_probs[i].mean(axis=(0, 1))
-        axes[i + 1].bar(np.arange(num_classes), slot_avg)
-        axes[i + 1].set_title(f"Slot {i} Class Probabilities")
-        axes[i + 1].set_xlabel("Class")
-        axes[i + 1].set_ylabel("Probability")
-        axes[i + 1].set_ylim(0, 1)  # Probabilities are between 0 and 1
+    # # Plot the class probability distribution for each slot.
+    # # We average the spatial dimensions (axis 0 and 1 of each slot) to get a single probability vector per slot.
+    # for i in range(num_slots):
+    #     # Average over the spatial dimensions (8,8) -> result is shape [num_classes]
+    #     slot_avg = slot_probs[i].mean(axis=(0, 1))
+    #     axes[i + 1].bar(np.arange(num_classes), slot_avg)
+    #     axes[i + 1].set_title(f"Slot {i} Class Probabilities")
+    #     axes[i + 1].set_xlabel("Class")
+    #     axes[i + 1].set_ylabel("Probability")
+    #     axes[i + 1].set_ylim(0, 1)  # Probabilities are between 0 and 1
 
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
     # ------------------------------------------------------ #
 
 if __name__ == '__main__':

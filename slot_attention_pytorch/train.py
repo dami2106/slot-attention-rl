@@ -15,10 +15,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument
 parser.add_argument('--model_dir', default='ckpts/model10.ckpt', type=str, help='where to save models' )
 parser.add_argument('--seed', default=0, type=int, help='random seed')
-parser.add_argument('--batch_size', default=38, type=int)
-parser.add_argument('--num_slots', default=7, type=int, help='Number of slots in Slot Attention.')
+parser.add_argument('--batch_size', default=35, type=int)
+parser.add_argument('--num_slots', default=5, type=int, help='Number of slots in Slot Attention.')
 parser.add_argument('--num_iterations', default=3, type=int, help='Number of attention iterations.')
-parser.add_argument('--hid_dim', default=64, type=int, help='hidden dimension size')
+parser.add_argument('--hid_dim', default=16, type=int, help='hidden dimension size')
 parser.add_argument('--learning_rate', default=0.0004, type=float)
 parser.add_argument('--warmup_steps', default=10000, type=int, help='Number of warmup steps for the learning rate.')
 parser.add_argument('--decay_rate', default=0.5, type=float, help='Rate for the learning rate decay.')
@@ -27,7 +27,7 @@ parser.add_argument('--num_workers', default=4, type=int, help='number of worker
 parser.add_argument('--num_epochs', default=1000, type=int, help='number of workers for loading data')
 
 opt = parser.parse_args()
-resolution = (32, 32)
+resolution = (8, 8)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
